@@ -51,10 +51,19 @@
 
 {% set show_secondary_image = settings.product_hover %}
 
+{# Consultative sales by main product category #}
+{% set product_category_name = product.category ? product.category.name | lower : '' %}
+{% set product_parent_category_name = product.category and product.category.parent ? product.category.parent.name | lower : '' %}
+{% set product_top_category_name = product.category and product.category.top ? product.category.top.name | lower : '' %}
+{% set product_category_path = product_category_name ~ ' ' ~ product_parent_category_name ~ ' ' ~ product_top_category_name %}
+
+{% set is_consultative_product_excluded = 'peças' in product_category_path or 'pecas' in product_category_path or 'materiais' in product_category_path %}
+{% set is_consultative_product = not is_consultative_product_excluded and ('equipamentos de climatização' in product_category_path or 'equipamentos de climatizacao' in product_category_path or 'climatização' in product_category_path or 'climatizacao' in product_category_path or 'ar-condicionado' in product_category_path or 'ar condicionado' in product_category_path or 'vrf' in product_category_path or 'multi split' in product_category_path or 'split' in product_category_path or 'cassete' in product_category_path or 'piso teto' in product_category_path or 'piso-teto' in product_category_path or 'duto' in product_category_path or 'industrial' in product_category_path or 'climatizadores' in product_category_path) %}
+
 {% if slide_item %}
     <div class="swiper-slide">
 {% endif %}
-    <div class="js-item-product{% if slide_item %} js-item-slide item-slide p-0{% endif %}{% if not slide_item %} col-{% if columns_mobile == 1 or horizontal_item %}12{% else %}6{% endif %} col-md-{% if horizontal_item %}4{% elseif columns_desktop == 4 %}3{% elseif columns_desktop == 5 %}2-4{% elseif columns_desktop == 5 %}{% else %}2{% endif %}{% endif %} item-product {% if reduced_item %}item-product-reduced{% endif %} col-grid" data-product-type="list" data-product-id="{{ product.id }}" data-store="product-item-{{ product.id }}" data-component="product-list-item" data-component-value="{{ product.id }}" {% if appear_transition %}data-transition="fade-in-up"{% endif %}>
+    <div class="js-item-product{% if slide_item %} js-item-slide item-slide p-0{% endif %}{% if not slide_item %} col-{% if columns_mobile == 1 or horizontal_item %}12{% else %}6{% endif %} col-md-{% if horizontal_item %}4{% elseif columns_desktop == 4 %}3{% elseif columns_desktop == 5 %}2-4{% elseif columns_desktop == 5 %}{% else %}2{% endif %}{% endif %} item-product {% if reduced_item %}item-product-reduced{% endif %} col-grid{% if is_consultative_product %} produto-venda-consultiva{% endif %}" data-product-type="list" data-product-id="{{ product.id }}" data-store="product-item-{{ product.id }}" data-component="product-list-item" data-component-value="{{ product.id }}" {% if appear_transition %}data-transition="fade-in-up"{% endif %}>
         <div class="js-item-container item{% if horizontal_item %} item-horizontal{% endif %}{% if slide_item %} mb-0{% endif %}">
 
             {% if horizontal_item and not (settings.quick_shop or settings.product_color_variants) %}
