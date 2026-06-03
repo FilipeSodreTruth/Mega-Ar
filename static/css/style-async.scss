@@ -2511,9 +2511,7 @@ body > p:first-child {
 }
 
 /* VRF landing top fixes */
-.background-secondary.mb-4,
-.page-header[data-store="page-title"],
-.page-header[data-store="page-title"] h1 {
+body.template-page .background-secondary.mb-4 {
   display: none !important;
 }
 
