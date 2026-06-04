@@ -3621,4 +3621,146 @@ stream_videos.forEach(function(player){
 
     {% endif %}
 
+    const consultiveProductCardSelector = ".produto-venda-consultiva";
+    const consultiveProductCtaSelector = [
+        ".js-quickshop-modal-open",
+        ".js-addtocart",
+        "[data-component='product-list-item.add-to-cart']"
+    ].join(",");
+
+    function getConsultiveProductUrl(card) {
+        const productLink = card.querySelector(".item-link[href], .js-product-item-image-link-private[href], a[href*='/produtos/']");
+
+        if (!productLink) {
+            return "";
+        }
+
+        try {
+            const url = new URL(productLink.getAttribute("href"), window.location.origin);
+            url.searchParams.set("abrir_formulario", "consultivo");
+            return url.toString();
+        } catch (e) {
+            const href = productLink.getAttribute("href");
+            const separator = href.indexOf("?") === -1 ? "?" : "&";
+            return href + separator + "abrir_formulario=consultivo";
+        }
+    }
+
+    function updateConsultiveProductCard(card) {
+        if (!card || card.dataset.consultiveCtaReady === "true") {
+            return;
+        }
+
+        const productUrl = getConsultiveProductUrl(card);
+
+        if (!productUrl) {
+            return;
+        }
+
+        const ctas = card.querySelectorAll(consultiveProductCtaSelector);
+
+        if (!ctas.length) {
+            return;
+        }
+
+        card.dataset.consultiveCtaReady = "true";
+        card.dataset.consultiveProductUrl = productUrl;
+
+        ctas.forEach((cta) => {
+            cta.classList.add("js-consultive-product-card-cta");
+            cta.setAttribute("data-consultive-product-url", productUrl);
+
+            if (cta.classList.contains("js-quickshop-modal-open")) {
+                cta.classList.remove("js-quickshop-modal-open", "js-fullscreen-modal-open", "js-modal-open");
+                cta.removeAttribute("data-toggle");
+                cta.removeAttribute("data-modal-url");
+            }
+
+            if (cta.tagName === "INPUT") {
+                cta.value = "Consultar";
+                cta.setAttribute("alt", "Consultar");
+            } else {
+                const wording = cta.querySelector(".js-open-quickshop-wording");
+
+                if (wording) {
+                    wording.textContent = "Consultar";
+                } else {
+                    cta.childNodes.forEach((node) => {
+                        if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                            node.textContent = "Consultar ";
+                        }
+                    });
+                }
+            }
+
+            cta.style.paddingLeft = "12px";
+            cta.style.paddingRight = "12px";
+            cta.style.gap = "6px";
+
+            cta.querySelectorAll(".js-open-quickshop-icon, .js-quickshop-bag, svg").forEach((icon) => {
+                icon.remove();
+            });
+
+            const submitContainer = cta.closest(".js-item-submit-container");
+
+            if (submitContainer) {
+                submitContainer.querySelectorAll(".js-quickshop-bag").forEach((icon) => {
+                    icon.remove();
+                });
+            }
+        });
+    }
+
+    function updateConsultiveProductCards() {
+        document.querySelectorAll(consultiveProductCardSelector).forEach(updateConsultiveProductCard);
+    }
+
+    document.addEventListener("click", function(e) {
+        const cta = e.target.closest(".js-consultive-product-card-cta, .produto-venda-consultiva " + consultiveProductCtaSelector);
+
+        if (!cta) {
+            return;
+        }
+
+        const card = cta.closest(consultiveProductCardSelector);
+
+        if (!card) {
+            return;
+        }
+
+        const productUrl = cta.getAttribute("data-consultive-product-url") || card.dataset.consultiveProductUrl || getConsultiveProductUrl(card);
+
+        if (!productUrl) {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = productUrl;
+    }, true);
+
+    document.addEventListener("submit", function(e) {
+        const form = e.target;
+        const card = form && form.closest ? form.closest(consultiveProductCardSelector) : null;
+
+        if (!card) {
+            return;
+        }
+
+        const productUrl = card.dataset.consultiveProductUrl || getConsultiveProductUrl(card);
+
+        if (!productUrl) {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = productUrl;
+    }, true);
+
+    updateConsultiveProductCards();
+
+    const consultiveProductCardsObserver = new MutationObserver(updateConsultiveProductCards);
+    consultiveProductCardsObserver.observe(document.body, { childList: true, subtree: true });
+
 });
