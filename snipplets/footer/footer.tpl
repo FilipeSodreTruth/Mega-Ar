@@ -139,6 +139,7 @@
 								<span class="d-block d-md-inline-block align-middle mb-3 mb-md-1 mr-md-2">{{ "Medios de envío" | translate }}</span>
 								<span class="d-inline-block align-middle">
 									{{ component('payment-shipping-logos', {'type' : 'shipping'}) }}
+									<img src="https://d1a9qnv764bsoo.cloudfront.net/stores/007/443/228/rte/Mega%20AR%20Produtos%20-%20Sodre%20(3).png" alt="Correios" class="tc-logo-correios" />
 								</span>
 							</div>
 						{% endif %}

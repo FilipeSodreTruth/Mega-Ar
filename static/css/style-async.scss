@@ -1017,6 +1017,32 @@ footer {
   border-radius: var(--border-radius-half);
 }
 
+.footer-payments-shipping-logos span.d-inline-block.align-middle {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 10px;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.footer-payments-shipping-logos .tc-logo-correios {
+  width: 38px;
+  height: 20px;
+  max-height: 20px;
+  display: block;
+  object-fit: contain;
+  margin: 3px;
+  vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  .footer-payments-shipping-logos .tc-logo-correios {
+    width: 38px;
+    height: 20px;
+    max-height: 20px;
+  }
+}
+
 .powered-by-text {
   display: inline-block;
 }
@@ -2556,4 +2582,3 @@ body.template-page .background-secondary.mb-4 {
 .user-content.pb-5 .tc-dvm-spec-grid {
   margin-top: 96px !important;
 }
-
