@@ -1,4 +1,5 @@
 node_modules/
-.nuvem/
+.nuvem
+.nube
 .DS_Store
 npm-debug.log*

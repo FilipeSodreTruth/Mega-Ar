@@ -58,7 +58,8 @@
 {% set product_category_path = product_category_name ~ ' ' ~ product_parent_category_name ~ ' ' ~ product_top_category_name %}
 
 {% set is_consultative_product_excluded = 'peças' in product_category_path or 'pecas' in product_category_path or 'materiais' in product_category_path %}
-{% set is_consultative_product = not is_consultative_product_excluded and ('equipamentos de climatização' in product_category_path or 'equipamentos de climatizacao' in product_category_path or 'climatização' in product_category_path or 'climatizacao' in product_category_path or 'ar-condicionado' in product_category_path or 'ar condicionado' in product_category_path or 'vrf' in product_category_path or 'multi split' in product_category_path or 'split' in product_category_path or 'cassete' in product_category_path or 'piso teto' in product_category_path or 'piso-teto' in product_category_path or 'duto' in product_category_path or 'industrial' in product_category_path or 'climatizadores' in product_category_path) %}
+{% set is_consultative_product = not is_consultative_product_excluded and ('equipamentos de climatização' in product_category_path or 'equipamentos de climatizacao' in product_category_path or 'climatização' in product_category_path or 'climatizacao' in product_category_path or 'ar-condicionado' in product_category_path or 'ar condicionado' in product_category_path or 'vrf' in product_category_path or 'multi split' in product_category_path or 'split' in product_category_path or 'cassete' in product_category_path or 'piso teto' in product_category_path or 'piso-teto' in product_category_path or 'industrial' in product_category_path or 'climatizadores' in product_category_path) %}
+{% set is_ac_free_shipping = is_consultative_product and not ('vrf' in product_category_path) and not ('climatizadores' in product_category_path) and not ('climatizador' in product_category_path) %}
 
 {% if slide_item %}
     <div class="swiper-slide">
@@ -191,6 +192,10 @@
                     <div class="js-item-name item-name {% if horizontal_item or reduced_item %}mb-2{% else %}mt-1 mb-3{% endif %} opacity-80" data-store="product-item-name-{{ product.id }}">{{ product.name }}</div>
 
                     {{ component('nubesdk-slot', { type: "after_product_grid_item_name" }) }}
+
+                    {% if is_ac_free_shipping and not reduced_item %}
+                        <div class="tc-frete-badge"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>Frete grátis — todo o Brasil</div>
+                    {% endif %}
 
                     {% if not reduced_item %}
                         {% include 'snipplets/labels.tpl' %}
