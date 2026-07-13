@@ -26,6 +26,16 @@
 
     {% include 'snipplets/labels.tpl' with {product_detail: true} %}
 
+    {# Free shipping badge by main product category — same rule as snipplets/grid/item.tpl #}
+    {% set product_category_name = product.category ? product.category.name | lower : '' %}
+    {% set product_parent_category_name = product.category and product.category.parent ? product.category.parent.name | lower : '' %}
+    {% set product_top_category_name = product.category and product.category.top ? product.category.top.name | lower : '' %}
+    {% set product_category_path = product_category_name ~ ' ' ~ product_parent_category_name ~ ' ' ~ product_top_category_name %}
+
+    {% set is_consultative_product_excluded = 'peças' in product_category_path or 'pecas' in product_category_path or 'materiais' in product_category_path %}
+    {% set is_consultative_product = not is_consultative_product_excluded and ('equipamentos de climatização' in product_category_path or 'equipamentos de climatizacao' in product_category_path or 'climatização' in product_category_path or 'climatizacao' in product_category_path or 'ar-condicionado' in product_category_path or 'ar condicionado' in product_category_path or 'vrf' in product_category_path or 'multi split' in product_category_path or 'split' in product_category_path or 'cassete' in product_category_path or 'piso teto' in product_category_path or 'piso-teto' in product_category_path or 'industrial' in product_category_path or 'climatizadores' in product_category_path) %}
+    {% set is_ac_free_shipping = is_consultative_product and not ('vrf' in product_category_path) and not ('climatizadores' in product_category_path) and not ('climatizador' in product_category_path) %}
+
     <div class="price-container" data-store="product-price-{{ product.id }}">
 
         {{ component('nubesdk-slot', { type: "before_product_detail_price" }) }}
@@ -121,6 +131,10 @@
         {% endif %}
 
         {{ component('nubesdk-slot', { type: "after_product_detail_payment_options" }) }}
+
+        {% if is_ac_free_shipping %}
+            <div class="tc-frete-badge tc-frete-badge--detail"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>Frete grátis para todo o Brasil</div>
+        {% endif %}
 
         {# Product availability #}
 

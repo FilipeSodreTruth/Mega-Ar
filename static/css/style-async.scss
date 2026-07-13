@@ -3070,3 +3070,17 @@ body.template-page .background-secondary.mb-4 {
   white-space: nowrap;
   overflow: hidden;
 }
+
+/* Versão maior para a página do produto (abaixo do preço/parcelas) */
+.tc-frete-badge--detail {
+  display: inline-flex;
+  gap: 7px;
+  font-size: 13px;
+  padding: 8px 14px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.tc-frete-badge--detail svg {
+  flex-shrink: 0;
+}
