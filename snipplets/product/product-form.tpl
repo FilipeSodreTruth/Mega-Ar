@@ -101,7 +101,7 @@
         {{ component('nubesdk-slot', { type: "before_product_detail_payment_options" }) }}
 
         {% if not home_main_product and (show_payments_info or hasDiscount) %}
-            <div {% if installments_info %}data-toggle="#installments-modal" data-modal-url="modal-fullscreen-payments"{% endif %} class="{% if installments_info %}js-modal-open js-fullscreen-modal-open{% endif %} js-product-payments-container mb-3" {% if not product.display_price or not (product.get_max_installments and product.get_max_installments(false)) %}style="display: none;"{% endif %}>
+            <div {% if installments_info and not is_consultative_product %}data-toggle="#installments-modal" data-modal-url="modal-fullscreen-payments"{% endif %} class="{% if installments_info and not is_consultative_product %}js-modal-open js-fullscreen-modal-open{% endif %} js-product-payments-container mb-3" {% if not product.display_price or not (product.get_max_installments and product.get_max_installments(false)) %}style="display: none;"{% endif %}>
         {% endif %}
             {% if show_payments_info %}
                 {{ component('installments', {'short_wording' : true, 'location' : 'product_detail', container_classes: { installment: "mb-2"}}) }}
@@ -120,6 +120,7 @@
                 </div>
             </div>
         {% if not home_main_product and (show_payments_info or hasDiscount) %}
+                {% if not is_consultative_product %}
                 <a id="btn-installments" class="btn-link font-small" {% if not (product.get_max_installments and product.get_max_installments(false)) %}style="display: none;"{% endif %}>
                   {% if not hasDiscount and not settings.product_detail_installments %}
                     {{ "Ver medios de pago" | translate }}
@@ -127,6 +128,7 @@
                     {{ "Ver más detalles" | translate }}
                   {% endif %}
                 </a>
+                {% endif %}
             </div>
         {% endif %}
 

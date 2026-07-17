@@ -243,7 +243,7 @@
                                 }}
                                 {% if product_can_show_installments %}
                                     {% if tc_card_parcelas %}
-                                        <div class="item-installments mt-1 product-installments tc-card-installments">{{ tc_card_parcelas }} x de {{ ((product.price / tc_card_parcelas) | round) | money }} sem juros</div>
+                                        <div class="item-installments mt-1 product-installments installment-no-interest tc-card-installments">{{ tc_card_parcelas }} x de {{ ((product.price / tc_card_parcelas) | round) | money }} sem juros</div>
                                     {% else %}
                                         {{ component('installments', {'location' : 'product_item' , 'short_wording' : true, container_classes: { installment: "item-installments mt-1"}}) }}
                                     {% endif %}
