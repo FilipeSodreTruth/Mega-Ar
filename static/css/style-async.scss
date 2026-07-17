@@ -3067,8 +3067,12 @@ body.template-page .background-secondary.mb-4 {
   padding: 5px 10px;
   margin-bottom: 8px;
   line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.tc-frete-badge svg {
+  flex-shrink: 0;
 }
 
 /* Versão maior para a página do produto (abaixo do preço/parcelas) */
