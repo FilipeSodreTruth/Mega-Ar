@@ -61,6 +61,11 @@
 {% set is_consultative_product = not is_consultative_product_excluded and ('equipamentos de climatização' in product_category_path or 'equipamentos de climatizacao' in product_category_path or 'climatização' in product_category_path or 'climatizacao' in product_category_path or 'ar-condicionado' in product_category_path or 'ar condicionado' in product_category_path or 'vrf' in product_category_path or 'multi split' in product_category_path or 'split' in product_category_path or 'cassete' in product_category_path or 'piso teto' in product_category_path or 'piso-teto' in product_category_path or 'industrial' in product_category_path or 'climatizadores' in product_category_path) %}
 {% set is_ac_free_shipping = is_consultative_product and not ('vrf' in product_category_path) and not ('climatizadores' in product_category_path) and not ('climatizador' in product_category_path) %}
 
+{# Installment cap by brand — mirrors the product-page JS. Cards only override the 8x brands (10x brands already match the gateway). #}
+{% set tc_brand = product.brand ? product.brand | lower | trim : '' %}
+{% set tc_parc8_brands = ['hisense', 'consul', 'electrolux', 'trane', 'vix', 'hitachi'] %}
+{% set tc_card_parcelas = (is_consultative_product and tc_brand and tc_brand in tc_parc8_brands) ? 8 : 0 %}
+
 {% if slide_item %}
     <div class="swiper-slide">
 {% endif %}
@@ -237,7 +242,11 @@
                                     }) 
                                 }}
                                 {% if product_can_show_installments %}
-                                    {{ component('installments', {'location' : 'product_item' , 'short_wording' : true, container_classes: { installment: "item-installments mt-1"}}) }}
+                                    {% if tc_card_parcelas %}
+                                        <div class="item-installments mt-1 product-installments tc-card-installments">{{ tc_card_parcelas }} x de {{ ((product.price / tc_card_parcelas) | round) | money }} sem juros</div>
+                                    {% else %}
+                                        {{ component('installments', {'location' : 'product_item' , 'short_wording' : true, container_classes: { installment: "item-installments mt-1"}}) }}
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         {% endif %}
